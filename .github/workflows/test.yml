@@ -1,0 +1,19 @@
+name: Test
+
+on:
+  pull_request:
+    branches:
+    - main
+
+jobs:
+  test-pr:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@c952173
+    - uses: actions/setup-node@c6fd00c
+      with:
+        node-version: '12.19.1'
+    - uses: bahmutov/npm-install@v1
+      with:
+          working-directory: /
+    - run: npm test

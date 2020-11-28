@@ -1,0 +1,39 @@
+name: Deploy
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  test:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@c952173
+    - uses: actions/setup-node@c6fd00c
+      with:
+        node-version: '12.19.1'
+    - uses: bahmutov/npm-install@v1
+      with:
+          working-directory: /
+    - run: npm test
+  deploy:
+    needs: test
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        working-directory: client
+    steps:
+    - uses: actions/checkout@c952173
+    - uses: actions/setup-node@c6fd00c
+      with:
+        node-version: '12.19.1'
+    - uses: bahmutov/npm-install@v1
+      with:
+          working-directory: client
+    - run: npm run build
+    - uses: w9jds/firebase-action@master
+      with:
+        args: deploy --only hosting
+      env:
+        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        PROJECT_PATH: ./client
