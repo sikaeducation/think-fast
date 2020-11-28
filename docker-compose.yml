@@ -2,10 +2,9 @@ version: "3.7"
 services:
   frontend:
     build:
-      context: ./app
+      context: ./client
     ports:
     - "8080:8080"
     volumes:
-    - "./app:/app"
+    - "./client:/app"
     command: /bin/sh -c "npm install && npm run serve"
-

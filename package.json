@@ -1,14 +1,15 @@
 {
-  "name": "wineflix",
+  "name": "think-fast",
   "version": "0.1.0",
-  "description": "Vue.js assessment for static sites",
+  "description": "Assessment engine for Sika Education",
   "scripts": {
     "test": "docker-compose -f docker-compose.yml -f docker-compose.cypress-run.yml up --exit-code-from cypress",
     "test:gui": "xhost +local: && docker-compose -f docker-compose.yml -f docker-compose.cypress-run.yml -f docker-compose.cypress-open.yml up --exit-code-from cypress",
+    "test:client:unit": "cd client && npm run test:unit",
     "start": "docker-compose up",
-    "lint": "cd app && npm run lint"
+    "lint": "cd client && npm run lint"
   },
   "keywords": [],
   "author": "Sika Education",
-  "license": "Proprietary"
+  "license": "MIT"
 }
