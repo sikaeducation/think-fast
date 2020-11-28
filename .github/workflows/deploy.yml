@@ -12,9 +12,6 @@ jobs:
     - uses: actions/setup-node@c6fd00c
       with:
         node-version: '12.19.1'
-    - uses: bahmutov/npm-install@v1
-      with:
-          working-directory: /
     - run: npm test
   deploy:
     needs: test
