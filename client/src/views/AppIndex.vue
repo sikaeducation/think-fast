@@ -19,7 +19,7 @@
         </div>
       </div>
       <div v-if="!responseSubmitted" class="response-options">
-        <button @click="evaluateResponse(false)" class="no" data-test-no-button>No</button>
+        <ButtonNo @click="evaluateResponse(false)" />
         <button @click="evaluateResponse(true)" class="yes" data-test-yes-button>Yes</button>
       </div>
       <div v-else class="response-options">
@@ -33,12 +33,14 @@
 <script>
 import AppHeader from '@/components/AppHeader.vue';
 import AppFooter from '@/components/AppFooter.vue';
+import ButtonNo from '@/components/ButtonNo.vue';
 
 export default {
   name: 'AppIndex',
   components: {
     AppHeader,
     AppFooter,
+    ButtonNo,
   },
   data() {
     return {
@@ -73,18 +75,6 @@ pre {
   @include code-font;
   background-color: $grey-9;
   padding: $baseline;
-}
-
-button {
-  @include button-font;
-  cursor: pointer;
-  border: none;
-  padding: $small $xxl;
-  box-shadow: 2px 2px 2px $grey-7;
-  transition: filter $transition-fast;
-  &:hover {
-    filter: brightness(1.1)
-  }
 }
 
 #app-index {
@@ -134,7 +124,7 @@ button {
       flex-flow: row wrap;
       width: 100%;
       margin-bottom: $xl;
-      .no, .yes, .next {
+      .button-no, .yes, .next {
         width: 200px;
         margin: $baseline;
         @media (max-width: $small-breakpoint){
@@ -142,9 +132,6 @@ button {
           margin-bottom: $baseline;
           width: 100%;
         }
-      }
-      .no {
-        background-color: $failure-color-5;
       }
       .yes {
         background-color: $success-color-5;
