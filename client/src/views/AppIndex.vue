@@ -2,33 +2,33 @@
   <div id="app-index">
     <header>
       <h1>Think Fast!</h1>
-      <div v-if="streak > 1" class="streak">
+      <div v-if="streak > 1" class="streak" data-test-streak>
         Streak: {{ streak }}
       </div>
     </header>
     <main>
       <div class="question">
-        <div class="prompt">
+        <div class="prompt" data-test-prompt>
           <p>According to the official <a href="https://v3.vuejs.org/style-guide">Vue style guide</a>, is this a good name for Vue component?</p>
           <pre>AppIndex.vue</pre>
         </div>
         <div v-if="responseSubmitted" class="feedback">
           <p v-if="responseCorrect">
-            <span class="correct">Correct!</span>
+            <span class="correct" data-test-correct-message>Correct!</span>
             That's PascalCase, two words, and uses the App prefix.
           </p>
           <p v-else>
-            <span class="incorrect">Incorrect.</span>
+            <span class="incorrect" data-test-incorrect-message>Incorrect.</span>
             That's PascalCase, two words, and uses the App prefix.
           </p>
         </div>
       </div>
       <div v-if="!responseSubmitted" class="response-options">
-        <button @click="evaluateResponse(false)" class="no">No</button>
-        <button @click="evaluateResponse(true)" class="yes">Yes</button>
+        <button @click="evaluateResponse(false)" class="no" data-test-no-button>No</button>
+        <button @click="evaluateResponse(true)" class="yes" data-test-yes-button>Yes</button>
       </div>
       <div v-else class="response-options">
-        <button @click="next" class="next">Next</button>
+        <button @click="next" class="next" data-test-next-button>Next</button>
       </div>
     </main>
     <footer>
