@@ -10,4 +10,4 @@ services:
     working_dir: /e2e
     volumes:
       - ./features:/e2e
-    entrypoint: /bin/sh -c "./wait-for-it.sh -t 180 http://frontend:8080 -- npm install && cypress run -q --project /e2e"
+    entrypoint: /bin/sh -c "./wait-for-it.sh -t 60 http://frontend:8080 -- npm install && cypress run -q --project /e2e"

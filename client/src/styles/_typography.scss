@@ -1,9 +1,9 @@
 @font-face {
-  font-family: "Gill Sans";
+  font-family: "gs";
   src: url("/gs.otf") format ("opentype");
 }
 @font-face {
-  font-family: "Gill Sans Condensed";
+  font-family: "gsc";
   src: url("/gsc.otf") format ("opentype");
 }
 @import url("https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap");
@@ -12,34 +12,34 @@
 @import "sizes";
 
 @mixin heading-font-1 {
-  font-family: "Gill Sans Condensed";
+  font-family: "gsc";
   color: $primary-color-5;
   font-size: $font-xxxxxl;
   letter-spacing: -2px;
 }
 
 @mixin hero-font-1 {
-  font-family: "Gill Sans Condensed";
+  font-family: "gsc";
   color: $primary-color-5;
   font-size: $font-xxxxxxxl;
   letter-spacing: -2px;
 }
 
 @mixin tagline-font {
-  font-family: "Gill Sans";
+  font-family: "gs";
   color: $primary-color-1;
   font-size: $font-baseline;
 }
 
 @mixin body-font {
-  font-family: "Gill Sans";
+  font-family: "gs";
   color: $primary-color-1;
   font-size: $font-large;
   font-weight: 400;
 }
 
 @mixin special-message-font {
-  font-family: "Gill Sans";
+  font-family: "gs";
   color: $primary-color-1;
   font-size: $font-xxxl;
   line-height: 1.2;
@@ -50,7 +50,7 @@
 }
 
 @mixin legal-font {
-  font-family: "Gill Sans";
+  font-family: "gs";
   color: $grey-7;
   font-size: $font-baseline;
   font-weight: 400;
@@ -64,7 +64,7 @@
 }
 
 @mixin button-font {
-  font-family: "Gill Sans";
+  font-family: "gs";
   color: $white;
   font-weight: 700;
   font-size: $font-xl;
