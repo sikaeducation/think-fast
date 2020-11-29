@@ -72,13 +72,14 @@ pre {
   background-color: $grey-9;
   padding: $baseline;
 }
+
 button {
   @include button-font;
   cursor: pointer;
   border: none;
   padding: $small $xxl;
   box-shadow: 2px 2px 2px $grey-7;
-  margin: 0 $baseline;
+  margin: $baseline;
   transition: filter $transition-fast;
   &:hover {
     filter: brightness(1.1)
@@ -88,6 +89,9 @@ button {
 #app-index {
   @include body-font;
   padding: $xxl;
+  @media (max-width: $small-breakpoint){
+    padding: $baseline;
+  }
   display: grid;
   min-height: 100vh;
   grid-template-rows: auto 1fr auto;
@@ -109,6 +113,7 @@ button {
       display: flex;
       justify-content: center;
       padding: $xxl;
+      flex-flow: row wrap;
       .no {
         background-color: $failure-color-5;
       }
