@@ -136,9 +136,12 @@ button {
       width: 100%;
       margin-bottom: $xl;
       .no, .yes, .next {
-        width: 100%;
+        width: 200px;
+        margin: $baseline;
         @media (max-width: $small-breakpoint){
+          margin: 0;
           margin-bottom: $baseline;
+          width: 100%;
         }
       }
       .no {
