@@ -31,15 +31,18 @@
         <button @click="next" class="next" data-test-next-button>Next</button>
       </div>
     </main>
-    <footer>
-      <small>©2020, <a href="https://sikaeducation.com">Sika Education</a></small>
-    </footer>
+    <AppFooter />
   </div>
 </template>
 
 <script>
+import AppFooter from '@/components/AppFooter.vue';
+
 export default {
   name: 'AppIndex',
+  components: {
+    AppFooter,
+  },
   data() {
     return {
       responseSubmitted: false,
@@ -153,11 +156,6 @@ button {
         background-color: $primary-color-5;
       }
     }
-  }
-  > footer {
-    display: flex;
-    justify-content: flex-end;
-    color: $grey-7;
   }
 }
 </style>
