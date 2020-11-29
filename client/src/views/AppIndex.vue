@@ -1,11 +1,6 @@
 <template>
   <div id="app-index">
-    <header>
-      <h1>Think Fast!</h1>
-      <div v-if="streak > 1" class="streak" data-test-streak>
-        Streak: {{ streak }}
-      </div>
-    </header>
+    <AppHeader :streak="streak" />
     <main>
       <div class="question">
         <div class="prompt" data-test-prompt>
@@ -36,11 +31,13 @@
 </template>
 
 <script>
+import AppHeader from '@/components/AppHeader.vue';
 import AppFooter from '@/components/AppFooter.vue';
 
 export default {
   name: 'AppIndex',
   components: {
+    AppHeader,
     AppFooter,
   },
   data() {
