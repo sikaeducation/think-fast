@@ -117,10 +117,9 @@ button {
       margin-top: $xxxxxl;
       .prompt, .feedback {
         @include special-message-font;
-        margin-bottom: $xxl;
+        margin-bottom: $xl;
       }
       .feedback {
-        margin-top: $xl;
         .correct {
           color: $success-color-5;
         }
