@@ -15,13 +15,11 @@ describe("Answering questions", () => {
   })
   it("can answer a question correctly", () => {
     clickThe("yes-button")
-    the("correct-message").should("exist")
-    the("incorrect-message").should("not.exist")
+    the("is-correct-message").contains("Correct!")
   })
   it("can answer a question incorrectly", () => {
     clickThe("no-button")
-    the("correct-message").should("not.exist")
-    the("incorrect-message").should("exist")
+    the("is-correct-message").contains("Incorrect.")
   })
 })
 

@@ -1,7 +1,5 @@
 <template>
-  <button @click="$emit('click', $event)">
-    <slot />
-  </button>
+  <button><slot /></button>
 </template>
 
 <script>
@@ -21,6 +19,13 @@ button {
   padding: $small $xxl;
   box-shadow: 2px 2px 2px $grey-7;
   transition: filter $transition-fast;
+  width: 200px;
+  margin: $baseline;
+  @media (max-width: $small-breakpoint){
+    margin: 0;
+    margin-bottom: $baseline;
+    width: 100%;
+  }
   &:hover {
     filter: brightness(1.1)
   }
