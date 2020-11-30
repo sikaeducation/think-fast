@@ -2,7 +2,7 @@
   <div id="the-app">
     <AppHeader :streak="streak" />
     <main>
-      <router-view @update-streak="updateStreak" />
+      <router-view />
     </main>
     <AppFooter />
   </div>
@@ -11,6 +11,7 @@
 <script>
 import AppHeader from '@/components/AppHeader.vue';
 import AppFooter from '@/components/AppFooter.vue';
+import { mapState } from 'vuex';
 
 export default {
   name: 'App',
@@ -18,17 +19,8 @@ export default {
     AppHeader,
     AppFooter,
   },
-  data() {
-    return {
-      streak: 0,
-    };
-  },
-  methods: {
-    updateStreak(wasCorrect) {
-      this.streak = wasCorrect
-        ? this.streak + 1
-        : 0;
-    },
+  computed: {
+    ...mapState(['streak']),
   },
 };
 </script>

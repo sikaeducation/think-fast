@@ -9,43 +9,26 @@
 
 <script>
 import QuizQuestion from '@/components/QuizQuestion.vue';
+import { mapState, mapActions } from 'vuex';
 
 export default {
   name: 'AppIndex',
   components: {
     QuizQuestion,
   },
-  data() {
-    return {
-      currentQuestion: {},
-    };
-  },
   created() {
-    this.currentQuestion = this.getNewQuestion();
+    this.getNextQuestion();
+  },
+  computed: {
+    ...mapState(['currentQuestion']),
   },
   methods: {
-    getNewQuestion() {
-      return {
-        correctFeedback: "That's PascalCase, two words, and uses the App prefix.",
-        incorrectFeedback: "That's PascalCase, two words, and uses the App prefix.",
-        promptText: '<p>According to the official <a href="https://v3.vuejs.org/style-guide">Vue style guide</a>, is this a good name for Vue component?</p>',
-        stemText: 'AppIndex.vue',
-        isCorrect: false,
-      };
-    },
-    evaluateResponse(response) {
-      this.currentQuestion.isCorrect = response;
-      this.currentQuestion.responseSubmitted = true;
-      this.$emit('update-streak', this.currentQuestion.isCorrect);
-    },
-    next() {
-      this.currentQuestion = this.getNewQuestion();
-    },
+    ...mapActions(['getNextQuestion', 'updateStreak', 'evaluateResponse']),
     handleResponse(response) {
       const responses = {
         yes: () => this.evaluateResponse(true),
         no: () => this.evaluateResponse(false),
-        next: () => this.next(),
+        next: () => this.getNextQuestion(),
       };
       responses[response]();
     },

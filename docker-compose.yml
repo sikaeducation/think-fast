@@ -5,6 +5,8 @@ services:
       context: ./client
     ports:
     - "8080:8080"
+    environment:
+    - VUE_APP_API_BASE_URL=https://thinkfast-api.sikaeducation.com/question
     volumes:
     - "./client:/app"
     command: /bin/sh -c "npm install && npm run serve"
