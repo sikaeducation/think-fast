@@ -32,10 +32,12 @@ export default {
 @import "@/styles/_sizes.scss";
 
 .response-options {
-  display: flex;
-  justify-content: center;
-  flex-flow: row wrap;
   width: 100%;
-  margin-bottom: $xl;
+  > div {
+    display: flex;
+    justify-content: center;
+    flex-flow: row wrap;
+    margin-bottom: $xl;
+  }
 }
 </style>
