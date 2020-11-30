@@ -7,6 +7,12 @@ describe("Viewing questions", () => {
   it("shows a question", () => {
     the("prompt").contains("AppIndex.vue")
   })
+  it("shows multiple questions", () => {
+    the("prompt").contains("AppIndex.vue")
+    clickThe("yes-button")
+    clickThe("next-button")
+    the("prompt").contains("app-index.vue")
+  })
 })
 
 describe("Answering questions", () => {
