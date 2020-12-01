@@ -1,6 +1,6 @@
 {
   "name": "think-fast",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Assessment engine for Sika Education",
   "scripts": {
     "test": "docker-compose -f docker-compose.yml -f docker-compose.cypress-run.yml up --exit-code-from cypress",
