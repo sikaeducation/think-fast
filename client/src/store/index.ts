@@ -43,7 +43,7 @@ export default createStore({
   },
   actions: {
     getNextQuestion({ commit }) {
-      axios.get(`${process.env.VUE_APP_API_BASE_URL}/questions`)
+      axios.post(`${process.env.VUE_APP_API_BASE_URL}/get-next-question`)
         .then((response: questionResponse) => {
           commit('setCurrentQuestion', response.data.question);
         }).catch((error) => {

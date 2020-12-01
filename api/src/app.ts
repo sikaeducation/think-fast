@@ -31,7 +31,7 @@ const questions = [{
 }];
 
 // Non-deterministic
-app.get('/questions', (request: Request, response: Response) => {
+app.post('/get-next-question', (request: Request, response: Response) => {
   response.json({
     question: sample(questions),
   });
