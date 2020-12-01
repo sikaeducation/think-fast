@@ -10,7 +10,7 @@ describe("Taking quizzes", () => {
       isCorrect: false,
     }
     server()
-    route("https://thinkfast.sikaeducation.com/api/question", { question }).as("getQuestion")
+    route("https://thinkfast-api.sikaeducation.com/questions", { question }).as("getQuestion")
     visit("/")
     wait("@getQuestion")
   })
@@ -26,7 +26,7 @@ describe("Taking quizzes", () => {
         stemText: 'app-index.vue',
         isCorrect: false,
       }
-      route("https://thinkfast.sikaeducation.com/api/question", { question }).as("getQuestion")
+      route("https://thinkfast-api.sikaeducation.com/questions", { question }).as("getQuestion")
       the("prompt").contains("AppIndex.vue")
       clickThe("yes-button")
       clickThe("next-button")
