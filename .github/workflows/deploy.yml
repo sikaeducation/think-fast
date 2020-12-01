@@ -50,4 +50,4 @@ jobs:
           heroku_app_name: "think-fast-api"
           heroku_email: "admin@sikaeducation.com"
           user_docker: true
-          working-directory: api
+          appdir: api
