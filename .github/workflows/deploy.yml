@@ -13,7 +13,7 @@ jobs:
       with:
         node-version: '12.19.1'
     - run: npm test
-  deploy:
+  deploy-client:
     needs: test
     runs-on: ubuntu-20.04
     defaults:
@@ -34,3 +34,17 @@ jobs:
       env:
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         PROJECT_PATH: ./client
+  deploy-server:
+    needs: test
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        working-directory: api
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.6.8
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "think-fast-api"
+          heroku_email: "admin@sikaeducation.com"
+          user_docker: true
