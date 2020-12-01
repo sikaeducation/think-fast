@@ -1,0 +1,47 @@
+{
+  "name": "think-fast-api",
+  "version": "0.1.0",
+  "description": "Think Fast API",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "jest",
+    "build": "tsc",
+    "build:watch": "nodemon -e ts --exec 'npm run build || exit 1'",
+    "start": "npm install && npm run build && node dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sikaeducation/think-fast.git"
+  },
+  "keywords": [
+    "quiz",
+    "api",
+    "express"
+  ],
+  "author": "Sika Education",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sikaeducation/think-fast/issues"
+  },
+  "homepage": "https://github.com/sikaeducation/think-fast#readme",
+  "dependencies": {
+    "@types/express": "^4.17.9",
+    "@types/node": "^14.14.10",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "debug": "^4.3.1",
+    "express": "^4.17.1",
+    "helmet": "^4.2.0",
+    "lodash": "^4.17.20",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.6",
+    "typescript": "^4.1.2"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.9.0",
+    "@typescript-eslint/parser": "^4.9.0",
+    "eslint": "^7.14.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1"
+  }
+}
