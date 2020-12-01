@@ -13,8 +13,6 @@ type questionResponse = {
   }
 }
 
-process.env.API_BASE_URL = 'https://thinkfast.sikaeducation.com/api/question';
-
 export default createStore({
   state: {
     currentQuestion: {
@@ -45,9 +43,11 @@ export default createStore({
   },
   actions: {
     getNextQuestion({ commit }) {
-      axios.get(process.env.VUE_APP_API_BASE_URL)
+      axios.get(`${process.env.VUE_APP_API_BASE_URL}/questions`)
         .then((response: questionResponse) => {
           commit('setCurrentQuestion', response.data.question);
+        }).catch((error) => {
+          console.error(error.message);
         });
     },
     updateStreak({ commit }, wasCorrect) {
