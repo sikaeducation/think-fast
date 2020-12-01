@@ -1,12 +1,25 @@
 version: "3.7"
 services:
   frontend:
+    depends_on:
+      - backend
     build:
       context: ./client
     ports:
-    - "8080:8080"
+    - "8090:80"
     environment:
-    - VUE_APP_API_BASE_URL=https://thinkfast-api.sikaeducation.com/question
+    - "VUE_APP_API_BASE_URL=https://thinkfast-api.sikaeducation.com"
+    - "PORT=80"
     volumes:
     - "./client:/app"
     command: /bin/sh -c "npm install && npm run serve"
+  backend:
+    build:
+      context: ./api
+    environment:
+    - "PORT=80"
+    ports:
+    - "8091:80"
+    volumes:
+    - "./api:/app"
+    command: /bin/sh -c "npm install && npm start"
