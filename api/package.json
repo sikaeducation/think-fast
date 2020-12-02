@@ -7,7 +7,7 @@
     "test": "jest",
     "build": "tsc",
     "build:watch": "nodemon -e ts --exec 'npm run build || exit 1'",
-    "start": "npm install && npm run build && node dist/index.js"
+    "start": "npm install && npm run build && nodemon dist/index.js"
   },
   "repository": {
     "type": "git",

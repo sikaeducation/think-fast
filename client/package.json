@@ -11,6 +11,7 @@
   "dependencies": {
     "@babel/traverse": "^7.12.9",
     "@babel/types": "^7.12.7",
+    "@types/lodash": "^4.14.165",
     "@vue/cli": "^4.5.9",
     "axios": "^0.21.0",
     "core-js": "^3.6.5",

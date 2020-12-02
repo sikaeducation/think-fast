@@ -1,5 +1,18 @@
 const { get, visit, the, clickThe, intercept, wait, server, route } = cy
 
+describe("Networking loading", () => {
+  it("shows a loading indicator while a page is loading", () => {
+    server()
+    route({
+      method: "POST",
+      url: "https://thinkfast-api.sikaeducation.com/get-next-question",
+      response: { question: { promptText: "anything" }},
+      delay: 1000,
+    }).as("getQuestion")
+    visit("/")
+    the("loading-indicator").should("exist")
+  })
+})
 describe("Taking quizzes", () => {
   beforeEach(() => {
     const question = {
@@ -13,6 +26,7 @@ describe("Taking quizzes", () => {
     route("POST", "https://thinkfast-api.sikaeducation.com/get-next-question", { question }).as("getQuestion")
     visit("/")
     wait("@getQuestion")
+    the("loading-indicator").should("not.exist")
   })
   describe("Viewing questions", () => {
     it("shows a question", () => {
