@@ -4,6 +4,7 @@
       v-if="currentQuestion.promptText"
       :question="currentQuestion"
       @response="handleResponse"
+
     />
     <LoadingSpinner
       v-else
