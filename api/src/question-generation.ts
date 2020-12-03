@@ -1,12 +1,19 @@
-import { flow, sample } from 'lodash/fp';
-import { messageContexts, stemContexts, contexts, context } from "./contexts"
-import { words } from "./words"
-import { stringCases, caseTransforms, stringCase } from "./cases"
+import { flow } from 'lodash/fp';
+import {
+  messageContexts, stemContexts, contexts, context,
+} from './contexts';
+import words from './words';
+import { stringCases, caseTransforms, stringCase } from './cases';
 
 type questionElements = {
   words: string
   context: context
   stringCase: stringCase
+}
+
+type question = {
+  promptText: string,
+  stemText: string,
 }
 
 function getStemText({ words, context, stringCase }: questionElements) {
@@ -20,7 +27,7 @@ function getPromptText(contextMessage: string) {
   return `<p>According to the official <a href='https://v3.vuejs.org/style-guide'>Vue style guide</a>, is this a good <strong>${contextMessage}</strong> for Vue component?</p>`;
 }
 
-function _generateQuestion({ words, context, stringCase }: questionElements) {
+function _generateQuestion({ words, context, stringCase }: questionElements): question {
   const stemText = getStemText({ words, context, stringCase });
   const promptText = getPromptText(messageContexts[context]);
 
@@ -34,15 +41,15 @@ function safeSample<T>(array: Array<T>): T {
   return array[Math.floor(Math.random() * array.length)];
 }
 
-function generateQuestion() {
+function generateQuestion(): question {
   return _generateQuestion({
     words: safeSample(words),
     context: safeSample(contexts),
     stringCase: safeSample(stringCases),
-  })
+  });
 }
 
 export {
   generateQuestion,
   _generateQuestion,
-}
+};

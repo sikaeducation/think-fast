@@ -1,13 +1,12 @@
-import { Request, Response } from 'express';
+import express, { Request, Response } from 'express';
 
-const express = require('express');
+import cors from 'cors';
+import helmet from 'helmet';
+import bodyParser from 'body-parser';
+import morgan from 'morgan';
+import { generateQuestion } from './question-generation';
 
 const app = express();
-const cors = require('cors');
-const helmet = require('helmet');
-const bodyParser = require('body-parser');
-const morgan = require('morgan');
-const lodash = require('lodash/fp');
 
 app.use(cors());
 app.use(helmet());
@@ -15,11 +14,10 @@ app.use(bodyParser.json());
 app.use(morgan('dev'));
 
 // Non-deterministic
-import { generateQuestion } from "./question-generation";
 app.post('/get-next-question', (request: Request, response: Response) => {
   response.json({
     question: generateQuestion(),
   });
 });
 
-module.exports = app;
+export default app;

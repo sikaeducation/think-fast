@@ -1,4 +1,4 @@
-import { messageContexts, context } from "./contexts"
+import { messageContexts, context } from './contexts';
 
 function generateFeedback(context: context) {
   const reasonMessages: Record<string, string> = {

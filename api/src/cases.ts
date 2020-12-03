@@ -1,10 +1,10 @@
 import {
-  flow, camelCase, upperFirst, snakeCase, kebabCase
+  flow, camelCase, upperFirst, snakeCase, kebabCase,
 } from 'lodash/fp';
 
 const pascalCase = flow(camelCase, upperFirst);
-type stringCase = "kebab" | "pascal" | "camel" | "snake";
-const stringCases: stringCase[] = ["kebab", "pascal", "camel", "snake"];
+type stringCase = 'kebab' | 'pascal' | 'camel' | 'snake';
+const stringCases: stringCase[] = ['kebab', 'pascal', 'camel', 'snake'];
 
 type stringTransform = (string: string) => string
 const caseTransforms: Record<string, stringTransform> = {
@@ -18,4 +18,4 @@ export {
   stringCases,
   caseTransforms,
   stringCase,
-}
+};

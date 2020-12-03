@@ -1,8 +1,6 @@
 const words = [
-  "TheApp",
-  "IndexView",
-]
+  'TheApp',
+  'IndexView',
+];
 
-export {
-  words,
-}
+export default words;
