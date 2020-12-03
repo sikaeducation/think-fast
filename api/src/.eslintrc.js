@@ -13,6 +13,8 @@ module.exports = {
   },
   plugins: [
     '@typescript-eslint',
+    '@typescript-eslint/eslint-recommended',
+    '@typescript-eslint/recommended',
   ],
   rules: {
   },
