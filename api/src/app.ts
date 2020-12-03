@@ -14,24 +14,11 @@ app.use(helmet());
 app.use(bodyParser.json());
 app.use(morgan('dev'));
 
-const { sample } = lodash;
-
-const { generateQuestion } = require("./question-generation");
-const cases = ["kebab", "camel", "pascal", "snake"];
-const contexts = ["file", "component", "variable"];
-const words = [
-  ["the", "app"],
-  ["index", "view"],
-]
-
 // Non-deterministic
+import { generateQuestion } from "./question-generation";
 app.post('/get-next-question', (request: Request, response: Response) => {
   response.json({
-    question: generateQuestion({
-      words: sample(words),
-      context: sample(contexts),
-      stringCase: sample(cases),
-    }),
+    question: generateQuestion(),
   });
 });
 
