@@ -8,7 +8,7 @@ describe("#evaluateAnswer", () => {
 
     expect(evaluateAnswer({ stem, context, response })).toEqual({
       isCorrect: true,
-      feedback: "It's Pascal Case, ends with a .vue extension.",
+      feedback: "That's a valid file name because it's Pascal Case, and ends with a .vue extension.",
     })
   })
 })

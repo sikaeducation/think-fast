@@ -1,5 +1,5 @@
-type context = "file" | "component" | "variable";
-const contexts: context[] = ["file", "component", "variable"];
+type context = 'file' | 'component' | 'variable';
+const contexts: context[] = ['file', 'component', 'variable'];
 const messageContexts: Record<string, string> = {
   file: 'file name',
   component: 'component name',
@@ -17,4 +17,4 @@ export {
   contexts,
   stemContexts,
   context,
-}
+};
