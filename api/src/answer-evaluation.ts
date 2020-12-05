@@ -15,48 +15,42 @@ type evaluatedAnswer = {
 
 const getMessages: (reasons: reason[]) => string[] = map('message');
 
-function getCorrectReasonMessages(word: string, context: context) {
-  const onlyPassingReasons = flow([
-    filter((reason: reason) => reason.check(word)),
-  ])(reasons);
-  const alwaysReasons = filter('always', onlyPassingReasons);
-  const rightIfPresentReasons = filter('rightIfPresent', onlyPassingReasons);
+function getCorrectReasons(word: string, context: context) {
+  const onlyPassingReasons = filter((reason: reason) => reason.check(word))(reasons);
+
   const theseContextualReasons = filter((reason) => reason.requiresContext === context
       && !reason.rejectIfPresent, onlyPassingReasons);
+  const alwaysReasons = filter('always', onlyPassingReasons);
+  const rightIfPresentReasons = filter('rightIfPresent', onlyPassingReasons);
 
-  return map('message')([
-    ...theseContextualReasons,
+  return [
     ...alwaysReasons,
+    ...theseContextualReasons,
     ...rightIfPresentReasons,
-  ]);
+  ];
 }
-function getIncorrectReasonMessages() {
+function getIncorrectReasons(word: string, context: context) {
+  const onlyPassingReasons = filter((reason: reason) => reason.check(word))(reasons);
+
+  const theseContextualReasons = filter((reason) => reason.requiresContext === context
+      && !reason.rejectIfPresent, onlyPassingReasons);
+  const wrongIfPresentReasons = filter((reason) => (reason.requiresContext === context
+      && !!reason.rejectIfPresent), onlyPassingReasons);
+  const neverReasons = filter('never', onlyPassingReasons);
+
+  return [
+    ...theseContextualReasons,
+    ...wrongIfPresentReasons,
+    ...neverReasons,
+  ];
 }
 
 function getReasonMessages(isCorrect: boolean, word: string, context: context) {
-  const onlyPassingReasons = flow([
-    filter((reason: reason) => reason.check(word)),
-  ])(reasons);
-
-  const neverReasons = filter('never', onlyPassingReasons);
-
-  const theseContextualReasons = filter((reason) => reason.requiresContext === context
-      && !reason.rejectIfPresent, onlyPassingReasons);
-
-  const wrongIfPresentReasons = filter((reason) => (reason.requiresContext === context
-      && !!reason.rejectIfPresent), onlyPassingReasons);
-
-  const messages = [
-    ...theseContextualReasons,
-  ];
-
-  return isCorrect
-    ? getCorrectReasonMessages(word, context)
-    : [
-      ...messages,
-      ...getMessages(wrongIfPresentReasons),
-      ...getMessages(neverReasons),
-    ];
+  return getMessages(
+    isCorrect
+      ? getCorrectReasons(word, context)
+      : getIncorrectReasons(word, context),
+  );
 }
 
 function getFeedback(isCorrect: boolean, word: string, context: context) {
