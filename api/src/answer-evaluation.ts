@@ -1,5 +1,5 @@
-import { reduce, filter } from 'lodash';
-import { map } from 'lodash/fp';
+import { reduce } from 'lodash';
+import { map, filter } from 'lodash/fp';
 import { messageContexts, context } from './contexts';
 import { reason, reasons } from './reasons';
 import { getWordFromStem, getContextFromStem } from './stem-transform';
@@ -16,18 +16,18 @@ type evaluatedAnswer = {
 const getMessages: (reasons: reason[]) => string[] = map('message');
 
 function getReasonMessages(isCorrect: boolean, word: string, context: context) {
-  const onlyPassingReasons = filter(reasons, (reason) => reason.check(word));
+  const onlyPassingReasons = filter((reason) => reason.check(word), reasons);
 
-  const neverReasons = filter(onlyPassingReasons, 'never');
-  const alwaysReasons = filter(onlyPassingReasons, 'always');
+  const neverReasons = filter('never', onlyPassingReasons);
+  const alwaysReasons = filter('always', onlyPassingReasons);
 
-  const theseContextualReasons = filter(onlyPassingReasons, (reason) => reason.requiresContext === context
-      && !reason.rejectIfPresent);
+  const theseContextualReasons = filter((reason) => reason.requiresContext === context
+      && !reason.rejectIfPresent, onlyPassingReasons);
 
-  const rightIfPresentReasons = filter(onlyPassingReasons, 'rightIfPresent');
+  const rightIfPresentReasons = filter('rightIfPresent', onlyPassingReasons);
 
-  const wrongIfPresentReasons = filter(onlyPassingReasons, (reason) => (reason.requiresContext === context
-      && !!reason.rejectIfPresent));
+  const wrongIfPresentReasons = filter((reason) => (reason.requiresContext === context
+      && !!reason.rejectIfPresent), onlyPassingReasons);
 
   const messages = [
     ...getMessages(theseContextualReasons),
@@ -69,7 +69,7 @@ function determineCorrectness(stem: string) {
   const word = getWordFromStem(stem);
   const context = getContextFromStem(stem);
 
-  const reasonsForThisContext = filter(reasons, (reason) => reason.requiresContext === context);
+  const reasonsForThisContext = filter((reason) => reason.requiresContext === context, reasons);
   const passesTheseContextChecks = passesContextChecks(reasonsForThisContext);
 
   // const passesTheseContextChecks = flow([
