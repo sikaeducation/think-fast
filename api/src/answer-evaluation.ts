@@ -97,7 +97,7 @@ function evaluateAnswer(stem: string, response: boolean): evaluatedAnswer {
   };
 }
 
-module.exports = {
+export {
   evaluateAnswer,
   determineCorrectness,
   getReasonMessages,
