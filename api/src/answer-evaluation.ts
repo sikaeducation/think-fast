@@ -1,5 +1,5 @@
 import { reduce } from 'lodash';
-import { map, filter } from 'lodash/fp';
+import { map, filter, flow } from 'lodash/fp';
 import { messageContexts, context } from './contexts';
 import { reason, reasons } from './reasons';
 import { getWordFromStem, getContextFromStem } from './stem-transform';
@@ -15,30 +15,43 @@ type evaluatedAnswer = {
 
 const getMessages: (reasons: reason[]) => string[] = map('message');
 
-function getReasonMessages(isCorrect: boolean, word: string, context: context) {
-  const onlyPassingReasons = filter((reason) => reason.check(word), reasons);
-
-  const neverReasons = filter('never', onlyPassingReasons);
+function getCorrectReasonMessages(word: string, context: context) {
+  const onlyPassingReasons = flow([
+    filter((reason: reason) => reason.check(word)),
+  ])(reasons);
   const alwaysReasons = filter('always', onlyPassingReasons);
-
+  const rightIfPresentReasons = filter('rightIfPresent', onlyPassingReasons);
   const theseContextualReasons = filter((reason) => reason.requiresContext === context
       && !reason.rejectIfPresent, onlyPassingReasons);
 
-  const rightIfPresentReasons = filter('rightIfPresent', onlyPassingReasons);
+  return map('message')([
+    ...theseContextualReasons,
+    ...alwaysReasons,
+    ...rightIfPresentReasons,
+  ]);
+}
+function getIncorrectReasonMessages() {
+}
+
+function getReasonMessages(isCorrect: boolean, word: string, context: context) {
+  const onlyPassingReasons = flow([
+    filter((reason: reason) => reason.check(word)),
+  ])(reasons);
+
+  const neverReasons = filter('never', onlyPassingReasons);
+
+  const theseContextualReasons = filter((reason) => reason.requiresContext === context
+      && !reason.rejectIfPresent, onlyPassingReasons);
 
   const wrongIfPresentReasons = filter((reason) => (reason.requiresContext === context
       && !!reason.rejectIfPresent), onlyPassingReasons);
 
   const messages = [
-    ...getMessages(theseContextualReasons),
+    ...theseContextualReasons,
   ];
 
   return isCorrect
-    ? [
-      ...messages,
-      ...getMessages(alwaysReasons),
-      ...getMessages(rightIfPresentReasons),
-    ]
+    ? getCorrectReasonMessages(word, context)
     : [
       ...messages,
       ...getMessages(wrongIfPresentReasons),
