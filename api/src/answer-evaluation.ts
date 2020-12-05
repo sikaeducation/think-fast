@@ -4,10 +4,6 @@ import { messageContexts, context } from './contexts';
 import { reason, reasons } from './reasons';
 import { getWordFromStem, getContextFromStem } from './stem-transform';
 
-type answer = {
-  stem: string
-  response: boolean
-}
 type evaluatedAnswer = {
   feedback: string
   isCorrect: boolean
@@ -32,14 +28,11 @@ function getCorrectReasons(word: string, context: context) {
 function getIncorrectReasons(word: string, context: context) {
   const onlyPassingReasons = filter((reason: reason) => reason.check(word))(reasons);
 
-  const theseContextualReasons = filter((reason) => reason.requiresContext === context
-      && !reason.rejectIfPresent, onlyPassingReasons);
   const wrongIfPresentReasons = filter((reason) => (reason.requiresContext === context
       && !!reason.rejectIfPresent), onlyPassingReasons);
   const neverReasons = filter('never', onlyPassingReasons);
 
   return [
-    ...theseContextualReasons,
     ...wrongIfPresentReasons,
     ...neverReasons,
   ];
@@ -58,7 +51,8 @@ function getFeedback(isCorrect: boolean, word: string, context: context) {
   const reasons = getReasonMessages(isCorrect, word, context);
   return reasons.reduce((message, reason, index) => (index !== reasons.length - 1
     ? `${message} ${reason},`
-    : `${message} and ${reason}.`), `That's a valid ${contextMessage} because`);
+    : `${message}${index > 0 ? ' and ' : ' '}${reason}.`),
+  `That's a${isCorrect ? ' valid' : 'n invalid'} ${contextMessage} because`);
 }
 
 function passesAlwaysCheck(reason: reason, word: string) {
@@ -67,29 +61,31 @@ function passesAlwaysCheck(reason: reason, word: string) {
 function passesNeverCheck(reason: reason, word: string) {
   return !(reason.never && reason.check(word));
 }
-function passesContextChecks(reasons: reason[]) {
+function passesAtLeastOneCheck(reasons: reason[]) {
   return (reason: reason, word: string) => reasons
     .some((reason) => !reason.rejectIfPresent && reason.check(word));
+}
+function isContext(context: context) {
+  return (reason: reason) => reason.requiresContext === context;
 }
 
 function determineCorrectness(stem: string) {
   const word = getWordFromStem(stem);
   const context = getContextFromStem(stem);
 
-  const reasonsForThisContext = filter((reason) => reason.requiresContext === context, reasons);
-  const passesTheseContextChecks = passesContextChecks(reasonsForThisContext);
-
-  // const passesTheseContextChecks = flow([
-  //   filter()
-  // ])(reasonsForThisContext)
+  const onlyThisContext = filter(isContext(context));
+  const passesContextChecks = flow([
+    onlyThisContext,
+    passesAtLeastOneCheck,
+  ])(reasons);
 
   return reduce(reasons, (isPassing, reason) => isPassing
-      && passesTheseContextChecks(reason, word)
+      && passesContextChecks(reason, word)
       && passesNeverCheck(reason, word)
       && passesAlwaysCheck(reason, word), true);
 }
 
-function evaluateAnswer({ stem, response }: answer): evaluatedAnswer {
+function evaluateAnswer(stem: string, response: boolean): evaluatedAnswer {
   const word = getWordFromStem(stem);
   const context = getContextFromStem(stem);
   const stemIsCorrect = determineCorrectness(stem);
