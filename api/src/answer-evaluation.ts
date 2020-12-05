@@ -1,9 +1,11 @@
+import { reduce, filter } from 'lodash';
+import { map } from 'lodash/fp';
 import { messageContexts, context } from './contexts';
-import { reasonMessages } from './reasons';
+import { reason, reasons } from './reasons';
+import { getWordFromStem, getContextFromStem } from './stem-transform';
 
 type answer = {
   stem: string
-  context: context
   response: boolean
 }
 type evaluatedAnswer = {
@@ -11,23 +13,80 @@ type evaluatedAnswer = {
   isCorrect: boolean
 }
 
-function getFeedback(reasons: string[], context: context) {
+const getMessages: (reasons: reason[]) => string[] = map('message');
+
+function getReasonMessages(isCorrect: boolean, word: string, context: context) {
+  const onlyPassingReasons = filter(reasons, (reason) => reason.check(word));
+
+  const neverReasons = filter(onlyPassingReasons, 'never');
+  const alwaysReasons = filter(onlyPassingReasons, 'always');
+
+  const theseContextualReasons = filter(onlyPassingReasons, (reason) => reason.requiresContext === context
+      && !reason.rejectIfPresent);
+
+  const rightIfPresentReasons = filter(onlyPassingReasons, 'rightIfPresent');
+
+  const wrongIfPresentReasons = filter(onlyPassingReasons, (reason) => (reason.requiresContext === context
+      && !!reason.rejectIfPresent));
+
+  const messages = [
+    ...getMessages(theseContextualReasons),
+  ];
+
+  return isCorrect
+    ? [
+      ...messages,
+      ...getMessages(alwaysReasons),
+      ...getMessages(rightIfPresentReasons),
+    ]
+    : [
+      ...messages,
+      ...getMessages(wrongIfPresentReasons),
+      ...getMessages(neverReasons),
+    ];
+}
+
+function getFeedback(isCorrect: boolean, word: string, context: context) {
   const contextMessage = messageContexts[context];
+  const reasons = getReasonMessages(isCorrect, word, context);
   return reasons.reduce((message, reason, index) => (index !== reasons.length - 1
-    ? `${message} ${reasonMessages[reason]},`
-    : `${message} and ${reasonMessages[reason]}.`), `That's a valid ${contextMessage} because`);
+    ? `${message} ${reason},`
+    : `${message} and ${reason}.`), `That's a valid ${contextMessage} because`);
 }
 
-function determineCorrectness(stem: string, context: context) {
-  return {
-    stemIsCorrect: true,
-    reasons: ['dashes', 'thePrefix', 'kebabCase'],
-  };
+function passesAlwaysCheck(reason: reason, word: string) {
+  return !(reason.always && !reason.check(word));
+}
+function passesNeverCheck(reason: reason, word: string) {
+  return !(reason.never && reason.check(word));
+}
+function passesContextChecks(reasons: reason[]) {
+  return (reason: reason, word: string) => reasons
+    .some((reason) => !reason.rejectIfPresent && reason.check(word));
 }
 
-function evaluateAnswer({ stem, context, response }: answer): evaluatedAnswer {
-  const { reasons, stemIsCorrect } = determineCorrectness(stem, context);
-  const feedback = getFeedback(reasons, context);
+function determineCorrectness(stem: string) {
+  const word = getWordFromStem(stem);
+  const context = getContextFromStem(stem);
+
+  const reasonsForThisContext = filter(reasons, (reason) => reason.requiresContext === context);
+  const passesTheseContextChecks = passesContextChecks(reasonsForThisContext);
+
+  // const passesTheseContextChecks = flow([
+  //   filter()
+  // ])(reasonsForThisContext)
+
+  return reduce(reasons, (isPassing, reason) => isPassing
+      && passesTheseContextChecks(reason, word)
+      && passesNeverCheck(reason, word)
+      && passesAlwaysCheck(reason, word), true);
+}
+
+function evaluateAnswer({ stem, response }: answer): evaluatedAnswer {
+  const word = getWordFromStem(stem);
+  const context = getContextFromStem(stem);
+  const stemIsCorrect = determineCorrectness(stem);
+  const feedback = getFeedback(stemIsCorrect, word, context);
 
   return {
     isCorrect: response === stemIsCorrect,
@@ -37,4 +96,6 @@ function evaluateAnswer({ stem, context, response }: answer): evaluatedAnswer {
 
 module.exports = {
   evaluateAnswer,
+  determineCorrectness,
+  getReasonMessages,
 };
