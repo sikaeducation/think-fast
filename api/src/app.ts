@@ -22,8 +22,8 @@ app.post('/get-question', (request: Request, response: Response) => {
 });
 
 app.post('/evaluate-answer', (request: Request, response: Response) => {
-  const { stem, userResponse } = request.body.answer;
-  response.json(evaluateAnswer(stem, userResponse));
+  const { stem, userResponse } = request.body;
+  response.json({ answer: evaluateAnswer(stem, userResponse) });
 });
 
 export default app;

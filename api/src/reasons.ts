@@ -24,6 +24,7 @@ const abbreviations = [
 
 const modifiers = [
   'active',
+  'inactive',
 ];
 
 type reason = {

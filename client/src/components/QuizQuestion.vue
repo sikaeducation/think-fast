@@ -29,9 +29,7 @@ export default {
   },
   computed: {
     feedback() {
-      return this.isCorrect
-        ? this.correctFeedback
-        : this.incorrectFeedback;
+      return this.question.feedback;
     },
     promptText() {
       return this.question.promptText;
@@ -41,12 +39,6 @@ export default {
     },
     isCorrect() {
       return this.question.isCorrect;
-    },
-    correctFeedback() {
-      return this.question.correctFeedback;
-    },
-    incorrectFeedback() {
-      return this.question.incorrectFeedback;
     },
     responseSubmitted() {
       return this.question.responseSubmitted;
