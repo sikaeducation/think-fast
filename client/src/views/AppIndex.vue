@@ -31,7 +31,7 @@ export default {
     ...mapState(['currentQuestion']),
   },
   methods: {
-    ...mapActions(['getNextQuestion', 'updateStreak', 'evaluateResponse']),
+    ...mapActions(['getNextQuestion', 'evaluateResponse']),
     handleResponse(response) {
       const responses = {
         yes: () => this.evaluateResponse(true),

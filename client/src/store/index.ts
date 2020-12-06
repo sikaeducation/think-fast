@@ -4,11 +4,8 @@ import axios from 'axios';
 type questionResponse = {
   data: {
     question: {
-      correctFeedback: string,
-      incorrectFeedback: string,
       promptText: string,
       stemText: string,
-      isCorrect: boolean,
     }
   }
 }
@@ -21,15 +18,17 @@ type answerResponse = {
   }
 }
 
+const emptyQuestion = {
+  feedback: '',
+  promptText: '',
+  stemText: '',
+  isCorrect: false,
+  responseSubmitted: false,
+};
+
 export default createStore({
   state: {
-    currentQuestion: {
-      feedback: '',
-      promptText: '',
-      stemText: '',
-      isCorrect: false,
-      responseSubmitted: false,
-    },
+    currentQuestion: emptyQuestion,
     feedback: '',
     streak: 0,
   },
@@ -56,14 +55,10 @@ export default createStore({
     getNextQuestion({ commit }) {
       axios.post(`${process.env.VUE_APP_API_BASE_URL}/get-question`)
         .then((response: questionResponse) => {
-          commit('setFeedback', '');
-          commit('setCurrentQuestion', response.data.question);
+          commit('setCurrentQuestion', { ...emptyQuestion, ...response.data.question });
         }).catch((error) => {
           console.error(error.message);
         });
-    },
-    updateStreak({ commit }, wasCorrect) {
-      commit('updateStreak', wasCorrect);
     },
     evaluateResponse({ commit, state }, userResponse) {
       const stem = state.currentQuestion.stemText;
