@@ -1,6 +1,6 @@
 {
   "name": "wineflix",
-  "version": "0.4.6",
+  "version": "0.5.0",
   "description": "Vue.js assessment for static sites",
   "scripts": {
     "test": "docker-compose -f docker-compose.yml -f docker-compose.cypress-run.yml up --exit-code-from cypress",
