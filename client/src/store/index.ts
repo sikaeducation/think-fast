@@ -12,20 +12,31 @@ type questionResponse = {
     }
   }
 }
+type answerResponse = {
+  data: {
+    answer: {
+      isCorrect: boolean,
+      feedback: string,
+    }
+  }
+}
 
 export default createStore({
   state: {
     currentQuestion: {
-      correctFeedback: '',
-      incorrectFeedback: '',
+      feedback: '',
       promptText: '',
       stemText: '',
       isCorrect: false,
       responseSubmitted: false,
     },
+    feedback: '',
     streak: 0,
   },
   mutations: {
+    setFeedback(state, feedback) {
+      state.currentQuestion.feedback = feedback;
+    },
     setCurrentQuestion(state, question) {
       state.currentQuestion = question;
     },
@@ -43,8 +54,9 @@ export default createStore({
   },
   actions: {
     getNextQuestion({ commit }) {
-      axios.post(`${process.env.VUE_APP_API_BASE_URL}/get-next-question`)
+      axios.post(`${process.env.VUE_APP_API_BASE_URL}/get-question`)
         .then((response: questionResponse) => {
+          commit('setFeedback', '');
           commit('setCurrentQuestion', response.data.question);
         }).catch((error) => {
           console.error(error.message);
@@ -53,10 +65,19 @@ export default createStore({
     updateStreak({ commit }, wasCorrect) {
       commit('updateStreak', wasCorrect);
     },
-    evaluateResponse({ commit, dispatch }, response) {
-      commit('markCurrentQuestionAsSubmitted');
-      commit('markCurrentQuestionAsCorrect', response);
-      dispatch('updateStreak', response);
+    evaluateResponse({ commit, state }, userResponse) {
+      const stem = state.currentQuestion.stemText;
+      axios.post(`${process.env.VUE_APP_API_BASE_URL}/evaluate-answer`, {
+        stem, userResponse,
+      }).then((response: answerResponse) => {
+        const { isCorrect, feedback } = response.data.answer;
+        commit('markCurrentQuestionAsSubmitted');
+        commit('markCurrentQuestionAsCorrect', isCorrect);
+        commit('updateStreak', isCorrect);
+        commit('setFeedback', feedback);
+      }).catch((error) => {
+        console.error(error.message);
+      });
     },
   },
   modules: {

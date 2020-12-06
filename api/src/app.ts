@@ -1,40 +1,29 @@
-import { Request, Response } from 'express';
+import express, { Request, Response } from 'express';
 
-const express = require('express');
+import cors from 'cors';
+import helmet from 'helmet';
+import bodyParser from 'body-parser';
+import morgan from 'morgan';
+import { generateQuestion } from './question-generation';
+import { evaluateAnswer } from './answer-evaluation';
 
 const app = express();
-const cors = require('cors');
-const helmet = require('helmet');
-const bodyParser = require('body-parser');
-const morgan = require('morgan');
-const lodash = require('lodash/fp');
 
 app.use(cors());
 app.use(helmet());
 app.use(bodyParser.json());
 app.use(morgan('dev'));
 
-const { sample } = lodash;
-
-const questions = [{
-  id: 1,
-  correctFeedback: "That's PascalCase, two words, and uses the App prefix.",
-  incorrectFeedback: "That's PascalCase, two words, and uses the App prefix.",
-  promptText: '<p>According to the official <a href="https://v3.vuejs.org/style-guide">Vue style guide</a>, is this a good name for Vue component?</p>',
-  stemText: 'AppIndex.vue',
-}, {
-  id: 2,
-  correctFeedback: "That's kebab-case, two words, and uses the App prefix.",
-  incorrectFeedback: "That's kebab-case, two words, and uses the App prefix.",
-  promptText: '<p>According to the official <a href="https://v3.vuejs.org/style-guide">Vue style guide</a>, is this a good name for Vue component?</p>',
-  stemText: 'app-index.vue',
-}];
-
 // Non-deterministic
-app.post('/get-next-question', (request: Request, response: Response) => {
+app.post('/get-question', (request: Request, response: Response) => {
   response.json({
-    question: sample(questions),
+    question: generateQuestion(),
   });
 });
 
-module.exports = app;
+app.post('/evaluate-answer', (request: Request, response: Response) => {
+  const { stem, userResponse } = request.body;
+  response.json({ answer: evaluateAnswer(stem, userResponse) });
+});
+
+export default app;
